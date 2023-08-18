@@ -36,6 +36,10 @@ img_formats = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'tiff', 'dng', 'webp', 'mpo']
 vid_formats = ['mov', 'avi', 'mp4', 'mpg', 'mpeg', 'm4v', 'wmv', 'mkv']  # acceptable video suffixes
 logger = logging.getLogger(__name__)
 
+# i ['1.jpg', '2.jpg', '20.jpg', '21.jpg', '3.jpg', '30.jpg', '4.jpg']
+# o ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '20.jpg', '21.jpg', '30.jpg']
+from natsort import natsorted
+
 # Get orientation exif tag
 for orientation in ExifTags.TAGS.keys():
     if ExifTags.TAGS[orientation] == 'Orientation':
@@ -143,7 +147,7 @@ class LoadImages:  # for inference
 
         self.img_size = img_size
         self.stride = stride
-        self.files = images + videos
+        self.files = natsorted(images + videos)
         self.nf = ni + nv  # number of files
         self.video_flag = [False] * ni + [True] * nv
         self.mode = 'image'
